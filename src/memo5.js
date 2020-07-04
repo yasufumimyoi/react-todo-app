@@ -15,9 +15,12 @@ export const Page2 = () => {
 };
 
 //JSXだと中にコンソールを入れる事が可能
+//分割代入
+//stateの値の名前と違っても使える this.state.cityをaddressに変更して値をもらう
 
-export const Page3 = (props) => {
-  console.log(props);
+export const Page3 = ({ name, address }) => {
+  console.log(name);
+  console.log(address);
   return (
     <div>
       <p>This is from Page3</p>

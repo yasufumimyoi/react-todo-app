@@ -22,6 +22,11 @@ handleAdd3 = () => {
   }));
 };
 
+//短いと一行で纏めることも可能
+handleDelete = () => {
+  this.setState(() => ({ number: [] }));
+};
+
 //イベント処理の時に使う関数パターン もしくは引数を渡したい時に使用する
 
 <button onClick={() => this.handleClick()}>Click me</button>;
