@@ -6,7 +6,7 @@ class memo6 extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      items: ["Eat Dinner"],
+      items: [],
     };
   }
 
@@ -38,13 +38,31 @@ class memo6 extends React.Component {
   };
 
   handleAllRemove = () => {
-    this.setState(() => ({ items: [] }));
+    //this.setState(() => ({ items: [] }));
+    db.ref("todos").update({
+      items: [],
+    });
   };
 
+  //todoがコレクションの名前
+  //itemsがオブジェクトのキーの名前
+
   async componentDidMount() {
-    let data = await (await db.ref("todos").once("value")).val();
-    this.setState({ items: data.name });
+    await db.ref("todos").set({
+      items: [
+        "Clean the room",
+        "Study React",
+        "Prepare for the dinner",
+        "Hangout!",
+      ],
+    });
   }
+
+  // async componentDidMount() {
+  //   let getDataFromDB = await (await db.ref("todos").once("value")).val();
+  //   let { items } = getDataFromDB;
+  //   this.setState({ items: this.state.items.concat(items) });
+  // }
 
   componentDidUpdate(prevProps, prevState) {
     if (prevState.items.length !== this.state.items) {
