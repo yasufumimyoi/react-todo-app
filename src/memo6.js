@@ -22,7 +22,9 @@ class memo6 extends React.Component {
           items: this.state.items.concat(item),
         },
         () => {
-          console.log(this.state.items);
+          db.ref("todos").update({
+            items: this.state.items,
+          });
         }
       );
       e.target.elements.items.value = "";
@@ -38,36 +40,39 @@ class memo6 extends React.Component {
   };
 
   handleAllRemove = () => {
-    //this.setState(() => ({ items: [] }));
-    db.ref("todos").update({
-      items: [],
-    });
+    this.setState(() => ({ items: [] }));
+    db.ref("todos").remove();
   };
 
   //todoがコレクションの名前
   //itemsがオブジェクトのキーの名前
 
-  async componentDidMount() {
-    await db.ref("todos").set({
-      items: [
-        "Clean the room",
-        "Study React",
-        "Prepare for the dinner",
-        "Hangout!",
-      ],
-    });
-  }
-
   // async componentDidMount() {
-  //   let getDataFromDB = await (await db.ref("todos").once("value")).val();
-  //   let { items } = getDataFromDB;
-  //   this.setState({ items: this.state.items.concat(items) });
+  //   await db.ref("todos").set({
+  //     items: [
+  //       "Clean the room",
+  //       "Study React",
+  //       "Prepare for the dinner",
+  //       "Hangout!",
+  //     ],
+  //   });
   // }
 
-  componentDidUpdate(prevProps, prevState) {
-    if (prevState.items.length !== this.state.items) {
-      console.log(this.state.items);
+  async componentDidMount() {
+    try {
+      let getDataFromDB = await (await db.ref("todos").once("value")).val();
+      let { items } = getDataFromDB;
+      this.setState({ items: this.state.items.concat(items) });
+    } catch {
+      console.log("No task in the database");
     }
+  }
+
+  componentDidUpdate() {
+    db.ref("todos").update({
+      items: this.state.items,
+    });
+    console.log(this.state.items);
   }
 
   //<ol></ol>で囲んで、mapメソットで表示させる
@@ -76,9 +81,9 @@ class memo6 extends React.Component {
       <div>
         <h2>Todo App</h2>
         {this.state.items.length > 0 ? (
-          <p>Here is your option!!</p>
+          <p>Here are your tasks!!</p>
         ) : (
-          <p>Put your option right now!!</p>
+          <p>Put down tasks right now!!</p>
         )}
         <ol>
           {this.state.items.map((item, index) => {
