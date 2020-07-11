@@ -1,6 +1,7 @@
 import React from "react";
 import Memo7 from "./memo7";
 import { db } from "./firebase";
+import Button from "@material-ui/core/Button";
 
 class memo6 extends React.Component {
   constructor(props) {
@@ -92,10 +93,18 @@ class memo6 extends React.Component {
             );
           })}
         </ol>
-        <button onClick={this.handleAllRemove}>All Remove</button>
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={this.handleAllRemove}
+        >
+          All Remove
+        </Button>
         <form onSubmit={this.handleSubmit}>
           <input type="text" name="items" />
-          <button>Submit</button>
+          <button variant="contained" color="primary">
+            Submit
+          </button>
         </form>
       </div>
     );
