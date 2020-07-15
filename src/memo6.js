@@ -59,15 +59,29 @@ class memo6 extends React.Component {
   //   });
   // }
 
-  async componentDidMount() {
-    try {
-      let getDataFromDB = await (await db.ref("todos").once("value")).val();
-      let { items } = getDataFromDB;
-      this.setState({ items: this.state.items.concat(items) });
-    } catch {
-      console.log("No task in the database");
-    }
-  }
+  // async componentDidMount() {
+  //   try {
+  //     let getDataFromDB = await (await db.ref("todos").once("value")).val();
+  //     let { items } = getDataFromDB;
+  //     this.setState({ items: this.state.items.concat(items) });
+  //   } catch {
+  //     console.log("No task in the database");
+  //   }
+  // }
+
+  componentDidMount = () => {
+    db.ref("todos").on("value", (snapshot) => {
+      const data = [];
+
+      snapshot.forEach((childSnapshot) => {
+        data.push({
+          id: childSnapshot.key,
+          ...childSnapshot.val(),
+        });
+      });
+      console.log(data);
+    });
+  };
 
   componentDidUpdate() {
     db.ref("todos").update({
