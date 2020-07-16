@@ -49,13 +49,9 @@ class memo6 extends React.Component {
   //itemsがオブジェクトのキーの名前
 
   // async componentDidMount() {
-  //   await db.ref("todos").set({
-  //     items: [
-  //       "Clean the room",
-  //       "Study React",
-  //       "Prepare for the dinner",
-  //       "Hangout!",
-  //     ],
+  //   await db.ref("todos").push({
+  //     description: "Hanging out with friends",
+  //     createdAt: "Wednesday",
   //   });
   // }
 
@@ -69,26 +65,36 @@ class memo6 extends React.Component {
   //   }
   // }
 
+  // componentDidMount = () => {
+  //   db.ref("todos").on("value", (snapshot) => {
+  //     const data = [];
+
+  //     snapshot.forEach((childSnapshot) => {
+  //       data.push({
+  //         id: childSnapshot.key,
+  //         ...childSnapshot.val(),
+  //       });
+  //     });
+  //     console.log(data);
+  //   });
+  // };
+
   componentDidMount = () => {
     db.ref("todos").on("value", (snapshot) => {
-      const data = [];
-
-      snapshot.forEach((childSnapshot) => {
-        data.push({
-          id: childSnapshot.key,
-          ...childSnapshot.val(),
+      snapshot.forEach((children) => {
+        this.setState({
+          items: this.state.items.concat(children.val().description),
         });
       });
-      console.log(data);
     });
   };
 
-  componentDidUpdate() {
-    db.ref("todos").update({
-      items: this.state.items,
-    });
-    console.log(this.state.items);
-  }
+  // componentDidUpdate() {
+  //   db.ref("todos").update({
+  //     items: this.state.items,
+  //   });
+  //   console.log(this.state.items);
+  // }
 
   //<ol></ol>で囲んで、mapメソットで表示させる
   render() {
@@ -101,9 +107,13 @@ class memo6 extends React.Component {
           <p>Put down tasks right now!!</p>
         )}
         <ol>
-          {this.state.items.map((item, index) => {
+          {this.state.items.map((description, index) => {
             return (
-              <Memo7 item={item} key={index} handleRemove={this.handleRemove} />
+              <Memo7
+                item={description}
+                key={index}
+                handleRemove={this.handleRemove}
+              />
             );
           })}
         </ol>
