@@ -1,5 +1,5 @@
 import React from "react";
-import Memo6 from "./memo6";
+import Memo8 from "./memo8";
 
 class App extends React.Component {
   constructor(props) {
@@ -12,7 +12,7 @@ class App extends React.Component {
   render() {
     return (
       <div>
-        <Memo6 />
+        <Memo8 />
       </div>
     );
   }
