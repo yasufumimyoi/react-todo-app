@@ -26,7 +26,6 @@ class memo8 extends React.Component {
   render() {
     return (
       <div>
-        <h3>Todo App</h3>
         <form onSubmit={this.onFormSubmit}>
           <input type="text" placeholder="Title" name="title" />
           <input type="text" placeholder="Description" name="description" />
