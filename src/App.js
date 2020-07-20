@@ -1,14 +1,14 @@
 import React from "react";
-import Memo8 from "./memo8";
+import Memo6 from "./memo6";
 import { BrowserRouter, Route, Switch, Link, NavLink } from "react-router-dom";
 
 const Header = () => (
   <header>
-    <h3>Todo App</h3>
+    <h2>Todo App</h2>
     <NavLink to="/" activeClassName="selected" exact={true}>
       Dashboard
     </NavLink>
-    <NavLink to="create" activeClassName="selected">
+    <NavLink to="/create" activeClassName="selected">
       Create List
     </NavLink>
   </header>
@@ -16,7 +16,7 @@ const Header = () => (
 
 const HomePage = () => (
   <div>
-    <p>Write down things to do</p>
+    <h3>Is there any things to do in your mind?</h3>
   </div>
 );
 
@@ -51,7 +51,7 @@ class App extends React.Component {
             <Route path="/create" component={CreatePage} />
             <Route component={NotFoundPage} />
           </Switch>
-          <Memo8 />
+          <Memo6 />
         </div>
       </BrowserRouter>
     );

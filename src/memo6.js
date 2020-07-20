@@ -7,7 +7,12 @@ class memo6 extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      items: [],
+      items: [
+        {
+          createdAt: "",
+          description: "",
+        },
+      ],
     };
   }
 
@@ -82,9 +87,9 @@ class memo6 extends React.Component {
   componentDidMount = () => {
     db.ref("todos").on("value", (snapshot) => {
       snapshot.forEach((children) => {
-        this.setState({
-          items: this.state.items.concat(children.val().description),
-        });
+        const data = children.val();
+        this.setState({ items: data });
+        console.log(this.state.items);
       });
     });
   };
@@ -100,23 +105,7 @@ class memo6 extends React.Component {
   render() {
     return (
       <div>
-        <h2>Todo App</h2>
-        {this.state.items.length > 0 ? (
-          <p>Here are your tasks!!</p>
-        ) : (
-          <p>Put down tasks right now!!</p>
-        )}
-        <ol>
-          {this.state.items.map((description, index) => {
-            return (
-              <Memo7
-                item={description}
-                key={index}
-                handleRemove={this.handleRemove}
-              />
-            );
-          })}
-        </ol>
+        <p>{this.state.items.description}</p>
         <Button
           variant="contained"
           color="primary"
@@ -136,3 +125,24 @@ class memo6 extends React.Component {
 }
 
 export default memo6;
+
+const temp = () => (
+  <div>
+    {this.state.items.length > 0 ? (
+      <p>Here are your tasks!!</p>
+    ) : (
+      <p>Put down tasks right now!!</p>
+    )}
+    <ol>
+      {this.state.items.map((description, index) => {
+        return (
+          <Memo7
+            description={description}
+            key={index}
+            handleRemove={this.handleRemove}
+          />
+        );
+      })}
+    </ol>
+  </div>
+);
