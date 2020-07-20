@@ -1,15 +1,15 @@
 import React from "react";
 import Button from "@material-ui/core/Button";
 
-const memo7 = (props) => {
+const memo7 = ({ index, description, handleRemove }) => {
   return (
     <div>
-      <li key={props.index}>{props.item}</li>
+      <li key={index}>{description}</li>
       <Button
         variant="contained"
         color="primary"
         onClick={(e) => {
-          props.handleRemove(props.item);
+          handleRemove(handleRemove);
         }}
       >
         Remove
