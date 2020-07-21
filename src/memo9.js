@@ -1,5 +1,6 @@
 import React from "react";
 import moment from "moment";
+import { db } from "./firebase";
 import { v4 as uuidv4 } from "uuid";
 
 class memo9 extends React.Component {
@@ -8,16 +9,10 @@ class memo9 extends React.Component {
     this.state = {
       items: [
         {
-          id: "1",
-          title: "Book a restaurant for a party",
-          description: "With classmates",
-          createdAt: moment().format("MMM Do YY"),
-        },
-        {
-          id: "2",
-          title: "Checking a hostel in Okinawa",
-          description: "ASAP!! Otherwise might end up sleeping on the beach",
-          createdAt: moment().add(10, "days").format("MMM Do YY"),
+          id: "",
+          title: "",
+          description: "",
+          createdAt: "",
         },
       ],
     };
@@ -29,16 +24,25 @@ class memo9 extends React.Component {
       id: uuidv4(),
       title: e.target.elements.title.value,
       description: e.target.elements.description.value,
+      createdAt: moment().format("MMM Do YY"),
     };
 
-    if (data) {
-      const newData = this.state.items.concat([data]);
-      this.setState({ items: newData });
+    if (data.title || data.description) {
+      const inputData = this.state.items.concat([data]);
+      this.setState({ items: inputData });
+
+      const { id, title, description, createdAt } = data;
+      db.ref("todos").push({
+        id,
+        title,
+        description,
+        createdAt,
+      });
       data = {
         title: (e.target.elements.title.value = ""),
         description: (e.target.elements.description.value = ""),
       };
-      console.log(this.state.items);
+      console.log("After", this.state.items);
     }
 
     //pushで行う場合
@@ -57,6 +61,44 @@ class memo9 extends React.Component {
     // this.setState({ items: newData });
   };
 
+  handleRemove = (itemRemove) => {
+    this.setState((prevState) => ({
+      items: prevState.items.filter((item) => {
+        return itemRemove !== item;
+      }),
+    }));
+    console.log(this.state.items);
+  };
+
+  handleAllRemove = () => {
+    this.setState(() => ({ items: [] }));
+    db.ref("todos").remove();
+  };
+
+  componentDidMount = () => {
+    db.ref("todos").once("value", (snapshot) => {
+      const data = [];
+
+      snapshot.forEach((childrenSnapshot) => {
+        data.push({
+          // id: childrenSnapshot.key,
+          ...childrenSnapshot.val(),
+        });
+      });
+      this.setState({ items: data });
+      console.log("First", this.state.items);
+    });
+  };
+
+  // async componentDidMount() {
+  //   await db.ref("todos").push({
+  //     id: uuidv4(),
+  //     title: "Sleep as much as I want",
+  //     description: "Before going to Okinawa",
+  //     createdAt: moment().add(15, "days").format("MMM Do YY"),
+  //   });
+  // }
+
   render() {
     return (
       <div>
@@ -69,6 +111,7 @@ class memo9 extends React.Component {
                 <p>
                   {description} {createdAt}
                 </p>
+                <button onClick={(e) => this.handleRemove(item)}>Remove</button>
               </div>
             );
           })}
@@ -77,6 +120,7 @@ class memo9 extends React.Component {
           <input type="text" placeholder="Title" name="title" />
           <input type="text" placeholder="Description" name="description" />
           <button>Submit</button>
+          <button onClick={this.handleAllRemove}>All Remove</button>
         </form>
       </div>
     );

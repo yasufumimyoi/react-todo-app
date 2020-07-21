@@ -86,11 +86,16 @@ class memo6 extends React.Component {
 
   componentDidMount = () => {
     db.ref("todos").on("value", (snapshot) => {
-      snapshot.forEach((children) => {
-        const data = children.val();
-        this.setState({ items: data });
-        console.log(this.state.items);
+      const data = [];
+
+      snapshot.forEach((childrenSnapshot) => {
+        data.push({
+          id: childrenSnapshot.key,
+          ...childrenSnapshot.val(),
+        });
       });
+      this.setState({ items: data });
+      console.log(this.state.items);
     });
   };
 
@@ -105,7 +110,16 @@ class memo6 extends React.Component {
   render() {
     return (
       <div>
-        <p>{this.state.items.description}</p>
+        <ol>
+          {this.state.items.map((item) => {
+            const { id, createdAt, description } = item;
+            return (
+              <div key={id}>
+                <p>{description}</p>
+              </div>
+            );
+          })}
+        </ol>
         <Button
           variant="contained"
           color="primary"
