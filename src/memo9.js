@@ -67,7 +67,7 @@ class memo9 extends React.Component {
         return itemRemove !== item;
       }),
     }));
-    console.log(this.state.items);
+    db.ref(`todos/${itemRemove.uid}`).remove();
   };
 
   handleAllRemove = () => {
@@ -81,11 +81,12 @@ class memo9 extends React.Component {
 
       snapshot.forEach((childrenSnapshot) => {
         data.push({
-          // id: childrenSnapshot.key,
+          uid: childrenSnapshot.key,
           ...childrenSnapshot.val(),
         });
       });
       this.setState({ items: data });
+
       console.log("First", this.state.items);
     });
   };
