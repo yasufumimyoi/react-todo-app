@@ -62,12 +62,16 @@ class memo9 extends React.Component {
   };
 
   handleRemove = (itemRemove) => {
+    console.log(itemRemove);
+    const item = itemRemove.uid;
     this.setState((prevState) => ({
       items: prevState.items.filter((item) => {
         return itemRemove !== item;
       }),
     }));
-    db.ref(`todos/${itemRemove.uid}`).remove();
+    // db.ref(`todos/${itemRemove.uid}`).remove();
+    db.ref("todos").child(item).remove();
+    console.log(item);
   };
 
   handleAllRemove = () => {
@@ -76,7 +80,7 @@ class memo9 extends React.Component {
   };
 
   componentDidMount = () => {
-    db.ref("todos").once("value", (snapshot) => {
+    db.ref("todos").on("value", (snapshot) => {
       const data = [];
 
       snapshot.forEach((childrenSnapshot) => {
@@ -112,7 +116,7 @@ class memo9 extends React.Component {
                 <p>
                   {description} {createdAt}
                 </p>
-                <button onClick={(e) => this.handleRemove(item)}>Remove</button>
+                <button onClick={() => this.handleRemove(item)}>Remove</button>
               </div>
             );
           })}
