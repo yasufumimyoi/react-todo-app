@@ -1,7 +1,19 @@
 import React from "react";
 import moment from "moment";
-import { db } from "./firebase";
+import Button from "@material-ui/core/Button";
+import { db } from "../firebase/firebase";
 import { v4 as uuidv4 } from "uuid";
+import { makeStyles } from "@material-ui/core/styles";
+import TextField from "@material-ui/core/TextField";
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    "& > *": {
+      margin: theme.spacing(1),
+      width: "25ch",
+    },
+  },
+}));
 
 class memo9 extends React.Component {
   constructor(props) {
@@ -91,7 +103,7 @@ class memo9 extends React.Component {
       });
       this.setState({ items: data });
 
-      console.log("First", this.state.items);
+      //console.log("First", this.state.items);
     });
   };
 
@@ -116,16 +128,30 @@ class memo9 extends React.Component {
                 <p>
                   {description} {createdAt}
                 </p>
-                <button onClick={() => this.handleRemove(item)}>Remove</button>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={() => this.handleRemove(item)}
+                >
+                  Remove
+                </Button>
               </div>
             );
           })}
         </ol>
-        <form onSubmit={this.handleSubmit}>
-          <input type="text" placeholder="Title" name="title" />
-          <input type="text" placeholder="Description" name="description" />
-          <button>Submit</button>
-          <button onClick={this.handleAllRemove}>All Remove</button>
+        <form onSubmit={this.handleSubmit} noValidate autoComplete="off">
+          <TextField name="title" label="Title" />
+          <TextField name="description" label="Description" />
+          <Button variant="contained" color="primary" type="submit">
+            Submit
+          </Button>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={this.handleAllRemove}
+          >
+            All Remove
+          </Button>
         </form>
       </div>
     );
