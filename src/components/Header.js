@@ -21,18 +21,6 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-// export const Header = () => (
-//   <header>
-//     <h2>Todo App</h2>
-//     <NavLink to="/" activeClassName="selected" exact={true}>
-//       Dashboard
-//     </NavLink>
-//     <NavLink to="/create" activeClassName="selected">
-//       Create List
-//     </NavLink>
-//   </header>
-// );
-
 const handleLogOut = () => {
   firebase.auth().signOut();
 };
@@ -55,17 +43,21 @@ export function Header() {
           <Typography variant="h6" className={classes.title}>
             Todo App
           </Typography>
+          <NavLink to="/dashboard" activeClassName="selected" exact={true}>
+            <Typography variant="h6" className={classes.title}>
+              Dashboard
+            </Typography>
+          </NavLink>
+          <NavLink to="/create" activeClassName="selected">
+            <Typography variant="h6" className={classes.title}>
+              Create List
+            </Typography>
+          </NavLink>
           <Button color="inherit" onClick={handleLogOut}>
             Logout
           </Button>
         </Toolbar>
       </AppBar>
-      <NavLink to="/" activeClassName="selected" exact={true}>
-        Dashboard
-      </NavLink>
-      <NavLink to="/create" activeClassName="selected">
-        Create List
-      </NavLink>
     </div>
   );
 }
