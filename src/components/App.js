@@ -1,9 +1,8 @@
 import React from "react";
-import Form from "./FormPage";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import { Header } from "./Header";
-import { DashboardPage } from "./Dashboard";
-import { CreatePage } from "./CreatePage";
+import DashboardPage from "./Dashboard";
+import CreatePage from "./CreatePage";
 import { NotFoundPage } from "./NotFoundPage";
 import { LoginPage } from "./LoginPage";
 
@@ -22,11 +21,10 @@ class App extends React.Component {
           <Header />
           <Switch>
             <Route exact path="/" component={LoginPage} />
-            <Route path="/dashboard" component={DashboardPage} />
-            <Route path="/create" component={CreatePage} />
+            <Route exact path="/dashboard" component={DashboardPage} />
+            <Route exact path="/create" component={CreatePage} />
             <Route component={NotFoundPage} />
           </Switch>
-          <Form />
         </div>
       </BrowserRouter>
     );
