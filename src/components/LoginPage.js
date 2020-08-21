@@ -1,5 +1,6 @@
 import React from "react";
 import firebase from "../firebase/firebase";
+import Button from "@material-ui/core/Button";
 
 const login = () => {
   const provider = new firebase.auth.GoogleAuthProvider();
@@ -8,6 +9,9 @@ const login = () => {
 
 export const LoginPage = () => (
   <div>
-    <button onClick={login}>Login</button>
+    <h3>User Login</h3>
+    <Button onClick={login} variant="contained" color="primary" type="submit">
+      Login with Google
+    </Button>
   </div>
 );

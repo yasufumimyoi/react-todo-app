@@ -3,16 +3,6 @@ import { ListPage } from "./ListPage";
 import moment from "moment";
 import { db } from "../firebase/firebase";
 import { v4 as uuidv4 } from "uuid";
-import { makeStyles } from "@material-ui/core/styles";
-
-const useStyles = makeStyles((theme) => ({
-  root: {
-    "& > *": {
-      margin: theme.spacing(1),
-      width: "25ch",
-    },
-  },
-}));
 
 export default class Dashboard extends React.Component {
   constructor(props) {
@@ -53,7 +43,6 @@ export default class Dashboard extends React.Component {
         title: (e.target.elements.title.value = ""),
         description: (e.target.elements.description.value = ""),
       };
-      console.log("After", this.state.items);
     }
   };
 
