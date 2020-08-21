@@ -10,11 +10,6 @@ const useStyles = makeStyles({
   root: {
     minWidth: 275,
   },
-  bullet: {
-    display: "inline-block",
-    margin: "0 2px",
-    transform: "scale(0.8)",
-  },
   title: {
     fontSize: 14,
   },
@@ -27,7 +22,7 @@ export const ListPage = (props) => {
   const classes = useStyles();
   return (
     <div>
-      <Card className={classes.root} variant="outlined">
+      <Card variant="outlined" className={classes.root}>
         <CardContent>
           <Typography variant="h5" component="h2">
             {props.title}
@@ -40,8 +35,13 @@ export const ListPage = (props) => {
           </Typography>
         </CardContent>
         <CardActions>
-          <Button size="small" onClick={props.handleRemove}>
-            Check detail
+          <Button
+            size="small"
+            variant="contained"
+            color="primary"
+            onClick={props.handleRemove}
+          >
+            Remove
           </Button>
         </CardActions>
       </Card>

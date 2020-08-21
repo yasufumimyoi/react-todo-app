@@ -15,7 +15,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-class memo9 extends React.Component {
+class CreatePage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -42,6 +42,7 @@ class memo9 extends React.Component {
     if (data.title || data.description) {
       const inputData = this.state.items.concat([data]);
       this.setState({ items: inputData });
+      this.props.history.push("/dashboard");
 
       const { id, title, description, createdAt } = data;
       db.ref("todos").push({
@@ -54,7 +55,6 @@ class memo9 extends React.Component {
         title: (e.target.elements.title.value = ""),
         description: (e.target.elements.description.value = ""),
       };
-      console.log("After", this.state.items);
     }
 
     //pushで行う場合
@@ -92,7 +92,7 @@ class memo9 extends React.Component {
   };
 
   fetchData = () => {
-    db.ref("todos").on("value", (snapshot) => {
+    db.ref("todos").once("value", (snapshot) => {
       const data = [];
 
       snapshot.forEach((childrenSnapshot) => {
@@ -143,7 +143,7 @@ class memo9 extends React.Component {
   }
 }
 
-export default memo9;
+export default CreatePage;
 
 // <ol>
 // {this.state.items.map((item) => {
