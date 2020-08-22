@@ -1,8 +1,6 @@
 import React from "react";
 import { ListPage } from "./ListPage";
-import moment from "moment";
 import { db } from "../firebase/firebase";
-import { v4 as uuidv4 } from "uuid";
 
 export default class Dashboard extends React.Component {
   constructor(props) {
@@ -18,33 +16,6 @@ export default class Dashboard extends React.Component {
       ],
     };
   }
-  handleSubmit = (e) => {
-    e.preventDefault();
-
-    let data = {
-      id: uuidv4(),
-      title: e.target.elements.title.value,
-      description: e.target.elements.description.value,
-      createdAt: moment().format("MMM Do YY"),
-    };
-
-    if (data.title || data.description) {
-      const inputData = this.state.items.concat([data]);
-      this.setState({ items: inputData });
-
-      const { id, title, description, createdAt } = data;
-      db.ref("todos").push({
-        id,
-        title,
-        description,
-        createdAt,
-      });
-      data = {
-        title: (e.target.elements.title.value = ""),
-        description: (e.target.elements.description.value = ""),
-      };
-    }
-  };
 
   handleRemove = (itemRemove) => {
     console.log(itemRemove);
@@ -57,13 +28,8 @@ export default class Dashboard extends React.Component {
     db.ref("todos").child(item).remove();
   };
 
-  handleAllRemove = () => {
-    this.setState(() => ({ items: [] }));
-    db.ref("todos").remove();
-  };
-
   fetchData = () => {
-    db.ref("todos").on("value", (snapshot) => {
+    db.ref("todos").once("value", (snapshot) => {
       const data = [];
 
       snapshot.forEach((childrenSnapshot) => {

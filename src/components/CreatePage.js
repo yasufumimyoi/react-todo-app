@@ -3,17 +3,20 @@ import moment from "moment";
 import Button from "@material-ui/core/Button";
 import { db } from "../firebase/firebase";
 import { v4 as uuidv4 } from "uuid";
-import { makeStyles } from "@material-ui/core/styles";
+import { withStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
+import "../css/createpage.css";
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = (theme) => ({
   root: {
     "& > *": {
       margin: theme.spacing(1),
-      width: "25ch",
+    },
+    button: {
+      margin: theme.spacing(0),
     },
   },
-}));
+});
 
 class CreatePage extends React.Component {
   constructor(props) {
@@ -42,7 +45,6 @@ class CreatePage extends React.Component {
     if (data.title || data.description) {
       const inputData = this.state.items.concat([data]);
       this.setState({ items: inputData });
-      this.props.history.push("/dashboard");
 
       const { id, title, description, createdAt } = data;
       db.ref("todos").push({
@@ -56,21 +58,7 @@ class CreatePage extends React.Component {
         description: (e.target.elements.description.value = ""),
       };
     }
-
-    //pushで行う場合
-    //間接参照しているからpushでも変更できているのか？
-    // const { items } = this.state;
-    // items.push(data);
-    // this.setState({ items: items });
-
-    //concatで行う場合
-    // const newData = this.state.items.concat([data]);
-    // this.setState({ items: newData });
-
-    //spreadで行う場合
-    // const { items } = this.state;
-    // const newData = [...items, data];
-    // this.setState({ items: newData });
+    this.props.history.push("/dashboard");
   };
 
   handleRemove = (itemRemove) => {
@@ -91,42 +79,21 @@ class CreatePage extends React.Component {
     db.ref("todos").remove();
   };
 
-  fetchData = () => {
-    db.ref("todos").once("value", (snapshot) => {
-      const data = [];
-
-      snapshot.forEach((childrenSnapshot) => {
-        data.push({
-          uid: childrenSnapshot.key,
-          ...childrenSnapshot.val(),
-        });
-      });
-      this.setState({ items: data });
-
-      //console.log("First", this.state.items);
-    });
-  };
-
-  componentDidMount = () => {
-    this.fetchData();
-  };
-
-  // async componentDidMount() {
-  //   await db.ref("todos").push({
-  //     id: uuidv4(),
-  //     title: "Sleep as much as I want",
-  //     description: "Before going to Okinawa",
-  //     createdAt: moment().add(15, "days").format("MMM Do YY"),
-  //   });
-  // }
-
   render() {
+    const { classes } = this.props;
     return (
-      <div>
-        <h3>Add your list and organize your day!</h3>
-        <form onSubmit={this.handleSubmit} noValidate autoComplete="off">
-          <TextField name="title" label="Title" />
-          <TextField name="description" label="Description" />
+      <div className="form">
+        <h2 className="title">
+          Add task the thing to do and organize your day!
+        </h2>
+        <form
+          className={classes.root}
+          onSubmit={this.handleSubmit}
+          noValidate
+          autoComplete="off"
+        >
+          <TextField margin="dense" name="title" label="Title" />
+          <TextField margin="dense" name="description" label="Description" />
           <Button variant="contained" color="primary" type="submit">
             Submit
           </Button>
@@ -143,7 +110,7 @@ class CreatePage extends React.Component {
   }
 }
 
-export default CreatePage;
+export default withStyles(useStyles)(CreatePage);
 
 // <ol>
 // {this.state.items.map((item) => {
