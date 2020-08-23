@@ -5,6 +5,9 @@ import DashboardPage from "./Dashboard";
 import CreatePage from "./CreatePage";
 import { NotFoundPage } from "./NotFoundPage";
 import { LoginPage } from "./LoginPage";
+import Modal from "react-modal";
+
+Modal.setAppElement("#root");
 
 const App = () => {
   return (

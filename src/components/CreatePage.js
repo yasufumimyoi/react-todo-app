@@ -5,15 +5,17 @@ import { db } from "../firebase/firebase";
 import { v4 as uuidv4 } from "uuid";
 import { withStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
+import { ModalPage } from "../components/ModalPage";
 import "../css/createpage.css";
+
+import "react-dates/initialize";
+import "react-dates/lib/css/_datepicker.css";
+import { SingleDatePicker } from "react-dates";
 
 const useStyles = (theme) => ({
   root: {
     "& > *": {
       margin: theme.spacing(1),
-    },
-    button: {
-      margin: theme.spacing(0),
     },
   },
 });
@@ -28,8 +30,11 @@ class CreatePage extends React.Component {
           title: "",
           description: "",
           createdAt: "",
+          selected: "false",
         },
       ],
+      date: moment(),
+      focused: false,
     };
   }
   handleSubmit = (e) => {
@@ -40,25 +45,27 @@ class CreatePage extends React.Component {
       title: e.target.elements.title.value,
       description: e.target.elements.description.value,
       createdAt: moment().format("MMM Do YY"),
+      date: moment(this.state.date).format("MMM Do YY"),
     };
 
     if (data.title || data.description) {
       const inputData = this.state.items.concat([data]);
       this.setState({ items: inputData });
 
-      const { id, title, description, createdAt } = data;
+      const { id, title, description, createdAt, date } = data;
       db.ref("todos").push({
         id,
         title,
         description,
         createdAt,
+        date,
       });
       data = {
         title: (e.target.elements.title.value = ""),
         description: (e.target.elements.description.value = ""),
       };
+      this.props.history.push("/dashboard");
     }
-    this.props.history.push("/dashboard");
   };
 
   handleRemove = (itemRemove) => {
@@ -76,7 +83,16 @@ class CreatePage extends React.Component {
 
   handleAllRemove = () => {
     this.setState(() => ({ items: [] }));
+    this.setState(() => ({ selected: false }));
     db.ref("todos").remove();
+  };
+
+  openModal = () => {
+    this.setState(() => ({ selected: true }));
+  };
+
+  closeModal = () => {
+    this.setState(() => ({ selected: false }));
   };
 
   render() {
@@ -92,43 +108,47 @@ class CreatePage extends React.Component {
           noValidate
           autoComplete="off"
         >
-          <TextField margin="dense" name="title" label="Title" />
-          <TextField margin="dense" name="description" label="Description" />
-          <Button variant="contained" color="primary" type="submit">
+          <TextField
+            margin="dense"
+            name="title"
+            label="Title"
+            fullWidth
+            autoFocus
+          />
+          <TextField
+            margin="dense"
+            name="description"
+            label="Description"
+            fullWidth
+          />
+          <SingleDatePicker
+            date={this.state.date}
+            onDateChange={(date) => this.setState({ date })}
+            focused={this.state.focused}
+            onFocusChange={({ focused }) => this.setState({ focused })}
+            numberOfMonths={1}
+            isOutsideRange={() => false}
+          />
+          <Button variant="contained" color="primary" type="submit" fullWidth>
             Submit
           </Button>
           <Button
             variant="contained"
             color="primary"
-            onClick={this.handleAllRemove}
+            onClick={this.openModal}
+            fullWidth
           >
             All Remove
           </Button>
         </form>
+        <ModalPage
+          selected={this.state.selected}
+          handleAllRemove={this.handleAllRemove}
+          closeModal={this.closeModal}
+        />
       </div>
     );
   }
 }
 
 export default withStyles(useStyles)(CreatePage);
-
-// <ol>
-// {this.state.items.map((item) => {
-//   const { id, title, description, createdAt } = item;
-//   return (
-//     <div key={id}>
-//       <h4>{title}</h4>
-//       <p>
-//         {description} {createdAt}
-//       </p>
-//       <Button
-//         variant="contained"
-//         color="primary"
-//         onClick={() => this.handleRemove(item)}
-//       >
-//         Remove
-//       </Button>
-//     </div>
-//   );
-// })}
-// </ol>

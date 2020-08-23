@@ -18,7 +18,6 @@ export default class Dashboard extends React.Component {
   }
 
   handleRemove = (itemRemove) => {
-    console.log(itemRemove);
     const item = itemRemove.uid;
     this.setState((prevState) => ({
       items: prevState.items.filter((item) => {
@@ -38,7 +37,9 @@ export default class Dashboard extends React.Component {
           ...childrenSnapshot.val(),
         });
       });
-      this.setState({ items: data });
+      if (data.length > 0) {
+        this.setState({ items: data });
+      }
     });
   };
 

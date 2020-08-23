@@ -22,30 +22,34 @@ const useStyles = makeStyles({
 export const ListPage = (props) => {
   const classes = useStyles();
   return (
-    <div className="list">
-      <Card variant="outlined" className={classes.root}>
-        <CardContent>
-          <Typography variant="h5" component="h2">
-            {props.title}
-          </Typography>
-          <Typography className={classes.pos} color="textSecondary">
-            {props.createdAt}
-          </Typography>
-          <Typography variant="body2" component="p">
-            Note: {props.description}
-          </Typography>
-        </CardContent>
-        <CardActions>
-          <Button
-            size="small"
-            variant="contained"
-            color="primary"
-            onClick={props.handleRemove}
-          >
-            Remove
-          </Button>
-        </CardActions>
-      </Card>
+    <div>
+      {props.title && (
+        <div className="list">
+          <Card variant="outlined" className={classes.root}>
+            <CardContent>
+              <Typography variant="h5" component="h2">
+                {props.title}
+              </Typography>
+              <Typography className={classes.pos} color="textSecondary">
+                {props.date}
+              </Typography>
+              <Typography variant="body2" component="p">
+                Note: {props.description}
+              </Typography>
+            </CardContent>
+            <CardActions>
+              <Button
+                size="small"
+                variant="contained"
+                color="primary"
+                onClick={props.handleRemove}
+              >
+                Remove
+              </Button>
+            </CardActions>
+          </Card>
+        </div>
+      )}
     </div>
   );
 };
