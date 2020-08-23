@@ -49,7 +49,7 @@ export const Header = () => {
           </NavLink>
           <NavLink to="/create" activeClassName="selected" className="link">
             <Typography variant="h6" className={classes.title}>
-              Create List
+              Create Page
             </Typography>
           </NavLink>
           <Button color="inherit" onClick={handleLogOut}>
