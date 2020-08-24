@@ -8,6 +8,7 @@ import Button from "@material-ui/core/Button";
 import firebase from "../firebase/firebase";
 import WbIncandescentIcon from "@material-ui/icons/WbIncandescent";
 import "../css/header.css";
+import { useHistory } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -22,8 +23,14 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const handleLogOut = () => {
+const HandleHistory = () => {
   firebase.auth().signOut();
+  const history = useHistory();
+  return (
+    <Button onClick={() => history.push("/")} color="inherit">
+      Logout test
+    </Button>
+  );
 };
 
 export const Header = () => {
@@ -52,9 +59,7 @@ export const Header = () => {
               Create Page
             </Typography>
           </NavLink>
-          <Button color="inherit" onClick={handleLogOut}>
-            Logout
-          </Button>
+          <HandleHistory />
         </Toolbar>
       </AppBar>
     </div>

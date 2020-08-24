@@ -3,12 +3,13 @@ import ReactDOM from "react-dom";
 import App from "./components/App";
 import firebase from "./firebase/firebase";
 
-ReactDOM.render(
+const jsx = (
   <React.StrictMode>
     <App />
-  </React.StrictMode>,
-  document.getElementById("root")
+  </React.StrictMode>
 );
+
+ReactDOM.render(jsx, document.getElementById("root"));
 
 firebase.auth().onAuthStateChanged((user) => {
   if (user) {

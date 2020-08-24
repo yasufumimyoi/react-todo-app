@@ -7,7 +7,6 @@ import { withStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
 import { ModalPage } from "../components/ModalPage";
 import "../css/createpage.css";
-
 import "react-dates/initialize";
 import "react-dates/lib/css/_datepicker.css";
 import { SingleDatePicker } from "react-dates";
