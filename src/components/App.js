@@ -1,17 +1,20 @@
 import React from "react";
-import { BrowserRouter, Route, Switch } from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { Header } from "./Header";
 import DashboardPage from "./Dashboard";
 import CreatePage from "./CreatePage";
 import { NotFoundPage } from "./NotFoundPage";
 import { LoginPage } from "./LoginPage";
 import Modal from "react-modal";
+import { createBrowserHistory } from "history";
+
+export let history = createBrowserHistory();
 
 Modal.setAppElement("#root");
 
 const App = () => {
   return (
-    <BrowserRouter>
+    <Router>
       <div>
         <Header />
         <Switch>
@@ -21,7 +24,7 @@ const App = () => {
           <Route component={NotFoundPage} />
         </Switch>
       </div>
-    </BrowserRouter>
+    </Router>
   );
 };
 
