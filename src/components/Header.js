@@ -28,7 +28,7 @@ const HandleHistory = () => {
   const history = useHistory();
   return (
     <Button onClick={() => history.push("/")} color="inherit">
-      Logout test
+      Logout
     </Button>
   );
 };
