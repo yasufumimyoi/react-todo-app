@@ -1,5 +1,5 @@
-import React from "react";
-import { NavLink } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { NavLink, useHistory } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
@@ -8,7 +8,6 @@ import Button from "@material-ui/core/Button";
 import firebase from "../firebase/firebase";
 import WbIncandescentIcon from "@material-ui/icons/WbIncandescent";
 import "../css/header.css";
-import { useHistory } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -23,18 +22,28 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const HandleHistory = () => {
-  firebase.auth().signOut();
-  const history = useHistory();
-  return (
-    <Button onClick={() => history.push("/")} color="inherit">
-      Logout
-    </Button>
-  );
-};
-
-export const Header = () => {
+const Header = () => {
   const classes = useStyles();
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  useEffect(() => {
+    firebase.auth().onAuthStateChanged((use) => {
+      if (use) {
+        setIsAuthenticated(true);
+      }
+    });
+  }, [isAuthenticated]);
+
+  const LogoutButton = () => {
+    firebase.auth().signOut();
+
+    const history = useHistory();
+    return (
+      <Button onClick={() => history.push("/")} color="inherit">
+        Logout
+      </Button>
+    );
+  };
 
   return (
     <div className={classes.root}>
@@ -59,9 +68,11 @@ export const Header = () => {
               Create Page
             </Typography>
           </NavLink>
-          <HandleHistory />
+          {!isAuthenticated ? null : <LogoutButton />}
         </Toolbar>
       </AppBar>
     </div>
   );
 };
+
+export default Header;

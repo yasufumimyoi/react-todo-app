@@ -1,28 +1,35 @@
-import React from "react";
+import React, { useS } from "react";
 import ReactDOM from "react-dom";
-import App from "./components/App";
-import firebase from "./firebase/firebase";
-import { useHistory, useLocation } from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import Modal from "react-modal";
 
-const jsx = (
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
-);
+import Header from "./components/Header";
+import DashboardPage from "./components/Dashboard";
+import CreatePage from "./components/CreatePage";
+import NotFoundPage from "./components/NotFoundPage";
+import AuthExample from "./components/Example";
 
-let hasRender = false;
-const renderApp = () => {
-  if (!hasRender) {
-    ReactDOM.render(jsx, document.getElementById("root"));
-    hasRender = true;
-  }
+Modal.setAppElement("#root");
+
+const AppRouter = () => {
+  return (
+    <Router>
+      <div>
+        <Header />
+        <Switch>
+          <Route exact path="/" component={AuthExample} />
+          <Route exact path="/dashboard" component={DashboardPage} />
+          <Route exact path="/create" component={CreatePage} />
+          <Route component={NotFoundPage} />
+        </Switch>
+      </div>
+    </Router>
+  );
 };
 
-firebase.auth().onAuthStateChanged((user) => {
-  if (user) {
-    renderApp();
-  } else {
-    console.log("Log out");
-    ReactDOM.render(jsx, document.getElementById("root"));
-  }
-});
+ReactDOM.render(
+  <React.StrictMode>
+    <AppRouter />
+  </React.StrictMode>,
+  document.getElementById("root")
+);
