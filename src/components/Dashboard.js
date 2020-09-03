@@ -1,25 +1,11 @@
 import React from "react";
-import { ListPage } from "./ListPage";
+import ListPage from "./ListPage";
 import { db } from "../firebase/firebase";
 
-export default class Dashboard extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      items: [
-        {
-          id: "",
-          title: "",
-          description: "",
-          createdAt: "",
-        },
-      ],
-    };
-  }
-
-  handleRemove = (itemRemove) => {
+const Dashboard = ({ state, setState }) => {
+  const handleRemove = (itemRemove) => {
     const item = itemRemove.uid;
-    this.setState((prevState) => ({
+    setState((prevState) => ({
       items: prevState.items.filter((item) => {
         return itemRemove !== item;
       }),
@@ -27,38 +13,15 @@ export default class Dashboard extends React.Component {
     db.ref("todos").child(item).remove();
   };
 
-  fetchData = () => {
-    db.ref("todos").once("value", (snapshot) => {
-      const data = [];
+  return <div>{state.items[0].title}</div>;
+};
 
-      snapshot.forEach((childrenSnapshot) => {
-        data.push({
-          uid: childrenSnapshot.key,
-          ...childrenSnapshot.val(),
-        });
-      });
-      if (data.length > 0) {
-        this.setState({ items: data });
-      }
-    });
-  };
+export default Dashboard;
 
-  componentDidMount = () => {
-    this.fetchData();
-  };
-
-  render() {
-    console.log(this.state.items);
-    return (
-      <div>
-        {this.state.items.map((item) => (
-          <ListPage
-            key={item.id}
-            {...item}
-            handleRemove={() => this.handleRemove(item)}
-          />
-        ))}
-      </div>
-    );
-  }
-}
+// {state.items.map((item) => (
+//   <ListPage
+//     key={item.id}
+//     {...item}
+//     handleRemove={() => handleRemove(item)}
+//   />
+// ))}
