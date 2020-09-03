@@ -22,7 +22,7 @@ const customStyles = {
   },
 };
 
-export const ModalPage = (props) => {
+const ModalPage = (props) => {
   const classes = useStyles();
   return (
     <Modal
@@ -46,3 +46,5 @@ export const ModalPage = (props) => {
     </Modal>
   );
 };
+
+export default ModalPage;

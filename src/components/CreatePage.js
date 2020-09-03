@@ -5,7 +5,7 @@ import { db } from "../firebase/firebase";
 import { v4 as uuidv4 } from "uuid";
 import { withStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
-import { ModalPage } from "../components/ModalPage";
+import ModalPage from "../components/ModalPage";
 import "../css/createpage.css";
 import "react-dates/initialize";
 import "react-dates/lib/css/_datepicker.css";

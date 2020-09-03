@@ -19,7 +19,7 @@ const useStyles = makeStyles({
   },
 });
 
-export const ListPage = (props) => {
+const ListPage = (props) => {
   const classes = useStyles();
   return (
     <div>
@@ -53,3 +53,5 @@ export const ListPage = (props) => {
     </div>
   );
 };
+
+export default ListPage;
