@@ -3,9 +3,10 @@ import ReactDOM from "react-dom";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { db } from "./firebase/firebase";
 import Modal from "react-modal";
+import moment from "moment";
 
 import Header from "./components/Header";
-import DashboardPage from "./components/Dashboard";
+import ListPage from "./components/ListPage";
 import CreatePage from "./components/CreatePage";
 import NotFoundPage from "./components/NotFoundPage";
 import Auth from "./components/Auth";
@@ -17,14 +18,17 @@ const AppRouter = () => {
     items: [
       {
         id: "",
-        title: "Hello",
+        title: "",
         description: "",
         createdAt: "",
       },
     ],
+    date: moment(),
+    focused: false,
   });
 
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isModalSelected, setIsModalSelected] = useState(false);
 
   const fetchData = () => {
     db.ref("todos").once("value", (snapshot) => {
@@ -61,15 +65,28 @@ const AppRouter = () => {
               <Auth
                 isAuthenticated={isAuthenticated}
                 setIsAuthenticated={setIsAuthenticated}
+                state={state}
+                setState={setState}
               />
             )}
           />
           <Route
             exact
             path="/dashboard"
-            render={() => <DashboardPage state={state} setState={setState} />}
+            render={() => <ListPage state={state} setState={setState} />}
           />
-          <Route exact path="/create" component={CreatePage} />
+          <Route
+            exact
+            path="/create"
+            render={() => (
+              <CreatePage
+                state={state}
+                setState={setState}
+                isModalSelected={isModalSelected}
+                setIsModalSelected={setIsModalSelected}
+              />
+            )}
+          />
           <Route component={NotFoundPage} />
         </Switch>
       </div>

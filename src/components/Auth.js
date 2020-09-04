@@ -1,17 +1,17 @@
 import React, { useEffect } from "react";
 import firebase from "../firebase/firebase";
-import DashboardPage from "./Dashboard";
+import ListPage from "./ListPage";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 
-const Auth = ({ isAuthenticated, setIsAuthenticated }) => {
+const Auth = ({ isAuthenticated, setIsAuthenticated, state, setState }) => {
   useEffect(() => {
     firebase.auth().onAuthStateChanged((use) => {
       if (use) {
         setIsAuthenticated(true);
       }
     });
-  }, [isAuthenticated]);
+  }, [setIsAuthenticated]);
 
   const handleLogin = () => {
     const provider = new firebase.auth.GoogleAuthProvider();
@@ -21,7 +21,7 @@ const Auth = ({ isAuthenticated, setIsAuthenticated }) => {
   return (
     <div>
       {isAuthenticated ? (
-        <DashboardPage />
+        <ListPage state={state} setState={setState} />
       ) : (
         <div>
           <Typography>Please login to use Todo App</Typography>
