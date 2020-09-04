@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useHistory } from "react";
 import moment from "moment";
 import Button from "@material-ui/core/Button";
 import { db } from "../firebase/firebase";
@@ -19,135 +19,129 @@ const useStyles = (theme) => ({
   },
 });
 
-class CreatePage extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      items: [
-        {
-          id: "",
-          title: "",
-          description: "",
-          createdAt: "",
-          selected: "false",
-        },
-      ],
-      date: moment(),
-      focused: false,
-    };
-  }
-  handleSubmit = (e) => {
+const CreatePage = ({
+  state,
+  setState,
+  isModalSelected,
+  setIsModalSelected,
+}) => {
+  // const handleSubmit = (e) => {
+  //   e.preventDefault();
+
+  //   let data = {
+  //     id: uuidv4(),
+  //     title: e.target.elements.title.value,
+  //     description: e.target.elements.description.value,
+  //     createdAt: moment().format("MMM Do YY"),
+  //     date: moment(this.state.date).format("MMM Do YY"),
+  //   };
+
+  //   if (data.title || data.description) {
+  //     const inputData = this.state.items.concat([data]);
+  //     this.setState({ items: inputData });
+
+  //     const { id, title, description, createdAt, date } = data;
+  //     db.ref("todos").push({
+  //       id,
+  //       title,
+  //       description,
+  //       createdAt,
+  //       date,
+  //     });
+  //     data = {
+  //       title: (e.target.elements.title.value = ""),
+  //       description: (e.target.elements.description.value = ""),
+  //     };
+  //     this.props.history.push("/dashboard");
+  //   }
+  // };
+
+  const handleSubmit = (e) => {
     e.preventDefault();
 
-    let data = {
-      id: uuidv4(),
-      title: e.target.elements.title.value,
-      description: e.target.elements.description.value,
-      createdAt: moment().format("MMM Do YY"),
-      date: moment(this.state.date).format("MMM Do YY"),
-    };
-
-    if (data.title || data.description) {
-      const inputData = this.state.items.concat([data]);
-      this.setState({ items: inputData });
-
-      const { id, title, description, createdAt, date } = data;
-      db.ref("todos").push({
-        id,
-        title,
-        description,
-        createdAt,
-        date,
-      });
-      data = {
-        title: (e.target.elements.title.value = ""),
-        description: (e.target.elements.description.value = ""),
-      };
-      this.props.history.push("/dashboard");
-    }
+    db.ref("todos").push({
+      title: state.items[0].title,
+    });
   };
 
-  handleRemove = (itemRemove) => {
-    console.log(itemRemove);
-    const item = itemRemove.uid;
-    this.setState((prevState) => ({
-      items: prevState.items.filter((item) => {
-        return itemRemove !== item;
-      }),
-    }));
-    // db.ref(`todos/${itemRemove.uid}`).remove();
-    db.ref("todos").child(item).remove();
-    console.log(item);
+  const updateFiled = (e) => {
+    console.log(state.items);
+    setState({
+      items: [
+        {
+          ...state,
+          [e.target.name]: e.target.value,
+        },
+      ],
+    });
   };
 
-  handleAllRemove = () => {
-    this.setState(() => ({ items: [] }));
-    this.setState(() => ({ selected: false }));
+  const handleAllRemove = () => {
+    setState(() => ({ items: [] }));
+    setIsModalSelected(false);
     db.ref("todos").remove();
   };
 
-  openModal = () => {
-    this.setState(() => ({ selected: true }));
+  const openModal = () => {
+    setIsModalSelected(true);
   };
 
-  closeModal = () => {
-    this.setState(() => ({ selected: false }));
+  const closeModal = () => {
+    setIsModalSelected(false);
   };
 
-  render() {
-    const { classes } = this.props;
-    return (
-      <div className="form">
-        <h2 className="title">
-          Add task the thing to do and organize your day!
-        </h2>
-        <form
-          className={classes.root}
-          onSubmit={this.handleSubmit}
-          noValidate
-          autoComplete="off"
-        >
-          <TextField
-            margin="dense"
-            name="title"
-            label="Title"
-            fullWidth
-            autoFocus
-          />
-          <TextField
-            margin="dense"
-            name="description"
-            label="Description"
-            fullWidth
-          />
-          <SingleDatePicker
-            date={this.state.date}
-            onDateChange={(date) => this.setState({ date })}
-            focused={this.state.focused}
-            onFocusChange={({ focused }) => this.setState({ focused })}
-            numberOfMonths={1}
-            isOutsideRange={() => false}
-          />
-          <Button variant="contained" color="primary" type="submit" fullWidth>
-            Submit
-          </Button>
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={this.openModal}
-            fullWidth
-          >
-            All Remove
-          </Button>
-        </form>
-        <ModalPage
-          selected={this.state.selected}
-          handleAllRemove={this.handleAllRemove}
-          closeModal={this.closeModal}
+  return (
+    <div className="form">
+      <h2 className="title">Add task the thing to do and organize your day!</h2>
+      <form
+        className={useStyles.root}
+        onSubmit={handleSubmit}
+        noValidate
+        autoComplete="off"
+      >
+        <TextField
+          margin="dense"
+          name="title"
+          label="Title"
+          fullWidth
+          autoFocus
+          onChange={updateFiled}
         />
-      </div>
-    );
-  }
-}
+        <TextField
+          margin="dense"
+          name="description"
+          label="Description"
+          fullWidth
+          onChange={updateFiled}
+        />
+        <Button variant="contained" color="primary" type="submit" fullWidth>
+          Submit
+        </Button>
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={openModal}
+          fullWidth
+        >
+          All Remove
+        </Button>
+      </form>
+      <ModalPage
+        selected={isModalSelected}
+        handleAllRemove={handleAllRemove}
+        closeModal={closeModal}
+      />
+    </div>
+  );
+};
 
 export default withStyles(useStyles)(CreatePage);
+
+// <SingleDatePicker
+// date={this.state.date}
+// onDateChange={(date) => this.setState({ date })}
+// focused={this.state.focused}
+// onFocusChange={({ focused }) => this.setState({ focused })}
+// numberOfMonths={1}
+// isOutsideRange={() => false}
+// />
