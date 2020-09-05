@@ -1,9 +1,9 @@
-import React, { useState, useHistory } from "react";
+import React, { useState } from "react";
+import { useHistory } from "react-router-dom";
 import moment from "moment";
 import Button from "@material-ui/core/Button";
 import { db } from "../firebase/firebase";
-import { v4 as uuidv4 } from "uuid";
-import { withStyles } from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
 import ModalPage from "../components/ModalPage";
 import "../css/createpage.css";
@@ -11,13 +11,13 @@ import "react-dates/initialize";
 import "react-dates/lib/css/_datepicker.css";
 import { SingleDatePicker } from "react-dates";
 
-const useStyles = (theme) => ({
+const useStyles = makeStyles((theme) => ({
   root: {
-    "& > *": {
+    "& .MuiTextField-root": {
       margin: theme.spacing(1),
     },
   },
-});
+}));
 
 const CreatePage = ({
   state,
@@ -25,55 +25,29 @@ const CreatePage = ({
   isModalSelected,
   setIsModalSelected,
 }) => {
-  // const handleSubmit = (e) => {
-  //   e.preventDefault();
-
-  //   let data = {
-  //     id: uuidv4(),
-  //     title: e.target.elements.title.value,
-  //     description: e.target.elements.description.value,
-  //     createdAt: moment().format("MMM Do YY"),
-  //     date: moment(this.state.date).format("MMM Do YY"),
-  //   };
-
-  //   if (data.title || data.description) {
-  //     const inputData = this.state.items.concat([data]);
-  //     this.setState({ items: inputData });
-
-  //     const { id, title, description, createdAt, date } = data;
-  //     db.ref("todos").push({
-  //       id,
-  //       title,
-  //       description,
-  //       createdAt,
-  //       date,
-  //     });
-  //     data = {
-  //       title: (e.target.elements.title.value = ""),
-  //       description: (e.target.elements.description.value = ""),
-  //     };
-  //     this.props.history.push("/dashboard");
-  //   }
-  // };
+  const classes = useStyles();
+  const history = useHistory();
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [date, setDate] = useState(moment);
+  const [focused, setFocused] = useState(false);
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    db.ref("todos").push({
-      title: state.items[0].title,
-    });
-  };
+    const formatDate = date.format("MMM Do YY");
 
-  const updateFiled = (e) => {
-    console.log(state.items);
-    setState({
-      items: [
-        {
-          ...state,
-          [e.target.name]: e.target.value,
-        },
-      ],
-    });
+    if (title.length > 0 || description.length > 0) {
+      setState({ ...state, items: [{ title, description, formatDate }] });
+      db.ref("todos").push({
+        title,
+        description,
+        formatDate,
+      });
+      setTitle("");
+      setDescription("");
+      history.push("/");
+    }
   };
 
   const handleAllRemove = () => {
@@ -94,7 +68,7 @@ const CreatePage = ({
     <div className="form">
       <h2 className="title">Add task the thing to do and organize your day!</h2>
       <form
-        className={useStyles.root}
+        className={classes.root}
         onSubmit={handleSubmit}
         noValidate
         autoComplete="off"
@@ -105,14 +79,25 @@ const CreatePage = ({
           label="Title"
           fullWidth
           autoFocus
-          onChange={updateFiled}
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
         />
         <TextField
           margin="dense"
           name="description"
           label="Description"
           fullWidth
-          onChange={updateFiled}
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+        />
+        <SingleDatePicker
+          date={date}
+          onDateChange={(date) => setDate(date)}
+          focused={focused}
+          onFocusChange={() => setFocused(true)}
+          onClose={() => setFocused(false)}
+          numberOfMonths={1}
+          isOutsideRange={() => false}
         />
         <Button variant="contained" color="primary" type="submit" fullWidth>
           Submit
@@ -135,13 +120,4 @@ const CreatePage = ({
   );
 };
 
-export default withStyles(useStyles)(CreatePage);
-
-// <SingleDatePicker
-// date={this.state.date}
-// onDateChange={(date) => this.setState({ date })}
-// focused={this.state.focused}
-// onFocusChange={({ focused }) => this.setState({ focused })}
-// numberOfMonths={1}
-// isOutsideRange={() => false}
-// />
+export default CreatePage;

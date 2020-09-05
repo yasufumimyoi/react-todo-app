@@ -3,7 +3,6 @@ import ReactDOM from "react-dom";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { db } from "./firebase/firebase";
 import Modal from "react-modal";
-import moment from "moment";
 
 import Header from "./components/Header";
 import ListPage from "./components/ListPage";
@@ -21,17 +20,17 @@ const AppRouter = () => {
         title: "",
         description: "",
         createdAt: "",
+        date: "",
+        focused: false,
       },
     ],
-    date: moment(),
-    focused: false,
   });
 
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isModalSelected, setIsModalSelected] = useState(false);
 
   const fetchData = () => {
-    db.ref("todos").once("value", (snapshot) => {
+    db.ref("todos").on("value", (snapshot) => {
       const data = [];
 
       snapshot.forEach((childrenSnapshot) => {

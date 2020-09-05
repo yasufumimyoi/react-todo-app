@@ -31,7 +31,7 @@ const ListItem = (props) => {
                 {props.title}
               </Typography>
               <Typography className={classes.pos} color="textSecondary">
-                {props.date}
+                {props.formatDate}
               </Typography>
               <Typography variant="body2" component="p">
                 Note: {props.description}
