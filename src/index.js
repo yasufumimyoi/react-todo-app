@@ -1,14 +1,20 @@
 import React, { useState, useEffect } from "react";
 import ReactDOM from "react-dom";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Route,
+  Switch,
+  Redirect,
+} from "react-router-dom";
 import { db } from "./firebase/firebase";
 import Modal from "react-modal";
+import firebase from "./firebase/firebase";
 
 import Header from "./components/Header";
 import ListPage from "./components/ListPage";
 import CreatePage from "./components/CreatePage";
 import NotFoundPage from "./components/NotFoundPage";
-import Auth from "./components/Auth";
+import LoginPage from "./components/LoginPage";
 
 Modal.setAppElement("#root");
 
@@ -28,14 +34,15 @@ const AppRouter = () => {
 
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isModalSelected, setIsModalSelected] = useState(false);
+  const [uid, setUid] = useState(null);
 
   const fetchData = () => {
-    db.ref("todos").on("value", (snapshot) => {
+    db.ref(`users/${uid}/todos`).on("value", (snapshot) => {
       const data = [];
 
       snapshot.forEach((childrenSnapshot) => {
         data.push({
-          uid: childrenSnapshot.key,
+          id: childrenSnapshot.key,
           ...childrenSnapshot.val(),
         });
       });
@@ -46,8 +53,27 @@ const AppRouter = () => {
   };
 
   useEffect(() => {
+    firebase.auth().onAuthStateChanged((user) => {
+      if (user) {
+        setIsAuthenticated(true);
+      }
+    });
+  }, [setIsAuthenticated]);
+
+  useEffect(() => {
     fetchData();
   }, []);
+
+  const getUid = () => {
+    const user = firebase.auth().currentUser;
+    if (user != null) {
+      const currentUid = user.uid;
+      setUid(currentUid);
+      console.log(currentUid);
+    }
+  };
+
+  console.log(uid);
 
   return (
     <Router>
@@ -60,14 +86,16 @@ const AppRouter = () => {
           <Route
             exact
             path="/"
-            render={() => (
-              <Auth
-                isAuthenticated={isAuthenticated}
-                setIsAuthenticated={setIsAuthenticated}
-                state={state}
-                setState={setState}
-              />
-            )}
+            render={() => {
+              return isAuthenticated ? (
+                <Redirect to="/dashboard" />
+              ) : (
+                <LoginPage
+                  setIsAuthenticated={setIsAuthenticated}
+                  setUid={setUid}
+                />
+              );
+            }}
           />
           <Route
             exact
@@ -83,6 +111,7 @@ const AppRouter = () => {
                 setState={setState}
                 isModalSelected={isModalSelected}
                 setIsModalSelected={setIsModalSelected}
+                uid={uid}
               />
             )}
           />

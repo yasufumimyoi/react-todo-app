@@ -40,25 +40,27 @@ const Header = ({ isAuthenticated, setIsAuthenticated }) => {
           <Typography variant="h6" className={classes.title}>
             Todo App
           </Typography>
-          <NavLink
-            to="/dashboard"
-            activeClassName="selected"
-            exact={true}
-            className="link"
-          >
-            <Typography variant="h6" className={classes.title}>
-              Dashboard
-            </Typography>
-          </NavLink>
-          <NavLink to="/create" activeClassName="selected" className="link">
-            <Typography variant="h6" className={classes.title}>
-              Create Page
-            </Typography>
-          </NavLink>
           {!isAuthenticated ? null : (
-            <Button color="inherit" onClick={handleLogout}>
-              Logout
-            </Button>
+            <React.Fragment>
+              <NavLink
+                to="/dashboard"
+                activeClassName="selected"
+                exact={true}
+                className="link"
+              >
+                <Typography variant="h6" className={classes.title}>
+                  Dashboard
+                </Typography>
+              </NavLink>
+              <NavLink to="/create" activeClassName="selected" className="link">
+                <Typography variant="h6" className={classes.title}>
+                  Create Page
+                </Typography>
+              </NavLink>
+              <Button color="inherit" onClick={handleLogout}>
+                Logout
+              </Button>
+            </React.Fragment>
           )}
         </Toolbar>
       </AppBar>

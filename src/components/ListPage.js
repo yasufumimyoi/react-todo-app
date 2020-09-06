@@ -12,7 +12,7 @@ const ListPage = ({ state, setState }) => {
     }));
     db.ref("todos").child(item).remove();
   };
-  console.log(state);
+
   return (
     <div>
       {state.items.map((item, index) => (
