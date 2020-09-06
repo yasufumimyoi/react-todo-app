@@ -17,6 +17,9 @@ const useStyles = makeStyles((theme) => ({
       margin: theme.spacing(1),
     },
   },
+  button: {
+    marginTop: 10,
+  },
 }));
 
 const CreatePage = ({
@@ -24,6 +27,7 @@ const CreatePage = ({
   setState,
   isModalSelected,
   setIsModalSelected,
+  uid,
 }) => {
   const classes = useStyles();
   const history = useHistory();
@@ -39,7 +43,7 @@ const CreatePage = ({
 
     if (title.length > 0 || description.length > 0) {
       setState({ ...state, items: [{ title, description, formatDate }] });
-      db.ref("todos").push({
+      db.ref(`users/${uid}/todos`).push({
         title,
         description,
         formatDate,
@@ -99,7 +103,13 @@ const CreatePage = ({
           numberOfMonths={1}
           isOutsideRange={() => false}
         />
-        <Button variant="contained" color="primary" type="submit" fullWidth>
+        <Button
+          variant="contained"
+          color="primary"
+          type="submit"
+          fullWidth
+          className={classes.button}
+        >
           Submit
         </Button>
         <Button
@@ -107,6 +117,7 @@ const CreatePage = ({
           color="primary"
           onClick={openModal}
           fullWidth
+          className={classes.button}
         >
           All Remove
         </Button>
