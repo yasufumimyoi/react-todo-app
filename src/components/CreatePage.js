@@ -57,7 +57,7 @@ const CreatePage = ({
   const handleAllRemove = () => {
     setState(() => ({ items: [] }));
     setIsModalSelected(false);
-    db.ref("todos").remove();
+    db.ref(`users/${uid}/todos`).remove();
   };
 
   const openModal = () => {

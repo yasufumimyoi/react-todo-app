@@ -55,25 +55,16 @@ const AppRouter = () => {
   useEffect(() => {
     firebase.auth().onAuthStateChanged((user) => {
       if (user) {
+        const currentUid = user.uid;
         setIsAuthenticated(true);
+        setUid(currentUid);
       }
     });
   }, [setIsAuthenticated]);
 
   useEffect(() => {
     fetchData();
-  }, []);
-
-  const getUid = () => {
-    const user = firebase.auth().currentUser;
-    if (user != null) {
-      const currentUid = user.uid;
-      setUid(currentUid);
-      console.log(currentUid);
-    }
-  };
-
-  console.log(uid);
+  }, [uid]);
 
   return (
     <Router>
@@ -100,7 +91,9 @@ const AppRouter = () => {
           <Route
             exact
             path="/dashboard"
-            render={() => <ListPage state={state} setState={setState} />}
+            render={() => (
+              <ListPage state={state} setState={setState} uid={uid} />
+            )}
           />
           <Route
             exact
