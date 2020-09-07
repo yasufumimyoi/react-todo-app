@@ -2,15 +2,15 @@ import React from "react";
 import ListItem from "./ListItem";
 import { db } from "../firebase/firebase";
 
-const ListPage = ({ state, setState }) => {
+const ListPage = ({ state, setState, uid }) => {
   const handleRemove = (itemRemove) => {
-    const item = itemRemove.uid;
+    const item = itemRemove.id;
     setState((prevState) => ({
       items: prevState.items.filter((item) => {
         return itemRemove !== item;
       }),
     }));
-    db.ref("todos").child(item).remove();
+    db.ref(`users/${uid}/todos`).child(item).remove();
   };
 
   return (
