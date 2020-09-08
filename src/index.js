@@ -15,6 +15,7 @@ import ListPage from "./components/ListPage";
 import CreatePage from "./components/CreatePage";
 import NotFoundPage from "./components/NotFoundPage";
 import LoginPage from "./components/LoginPage";
+import Chart from "./temp/Chart";
 
 Modal.setAppElement("#root");
 
