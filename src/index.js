@@ -118,7 +118,7 @@ const AppRouter = () => {
 
 ReactDOM.render(
   <React.StrictMode>
-    <AppRouter />
+    <Chart />
   </React.StrictMode>,
   document.getElementById("root")
 );
