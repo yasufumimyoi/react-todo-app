@@ -16,6 +16,7 @@ import CreatePage from "./components/CreatePage";
 import NotFoundPage from "./components/NotFoundPage";
 import LoginPage from "./components/LoginPage";
 import Chart from "./temp/Chart";
+import Demo from "./temp/Demo";
 
 Modal.setAppElement("#root");
 
@@ -118,7 +119,7 @@ const AppRouter = () => {
 
 ReactDOM.render(
   <React.StrictMode>
-    <Chart />
+    <Demo />
   </React.StrictMode>,
   document.getElementById("root")
 );
