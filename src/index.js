@@ -17,6 +17,9 @@ import NotFoundPage from "./components/NotFoundPage";
 import LoginPage from "./components/LoginPage";
 import Chart from "./temp/Chart";
 import Demo from "./temp/Demo";
+import CssHeader from "./temp/CssHeader";
+import CssFooter from "./temp/CssFooter";
+import CssMedia from "./temp/CssMedia";
 
 Modal.setAppElement("#root");
 
@@ -119,7 +122,7 @@ const AppRouter = () => {
 
 ReactDOM.render(
   <React.StrictMode>
-    <Demo />
+    <CssMedia />
   </React.StrictMode>,
   document.getElementById("root")
 );
