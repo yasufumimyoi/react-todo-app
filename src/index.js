@@ -20,6 +20,7 @@ import Demo from "./temp/Demo";
 import CssHeader from "./temp/CssHeader";
 import CssFooter from "./temp/CssFooter";
 import CssMedia from "./temp/CssMedia";
+import Time from "./temp/Time";
 
 Modal.setAppElement("#root");
 
@@ -122,7 +123,7 @@ const AppRouter = () => {
 
 ReactDOM.render(
   <React.StrictMode>
-    <CssMedia />
+    <Time />
   </React.StrictMode>,
   document.getElementById("root")
 );
