@@ -21,6 +21,7 @@ import CssHeader from "./temp/CssHeader";
 import CssFooter from "./temp/CssFooter";
 import CssMedia from "./temp/CssMedia";
 import Time from "./temp/Time";
+import SwitchF from "./temp/Switch";
 
 Modal.setAppElement("#root");
 
@@ -123,7 +124,7 @@ const AppRouter = () => {
 
 ReactDOM.render(
   <React.StrictMode>
-    <Time />
+    <SwitchF />
   </React.StrictMode>,
   document.getElementById("root")
 );
